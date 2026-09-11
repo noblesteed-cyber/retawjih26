@@ -1,8 +1,4 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>إحصائيات إعادة التوجيه والمفصولين والمنقطعين</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
@@ -171,15 +167,15 @@ td input.txt{min-width:130px;text-align:right;padding:6px 8px;}
 .progress-fill.full{background:var(--good);}
 .print-title{display:none;}
 .sign-line{display:none;}
-body.printing .sign-line{display:block;margin:10px 0 24px;font-weight:600;font-size:.85rem;text-align:left;}
+body.printing .sign-line{display:block;margin:10px 0 9px;font-weight:600;font-size:.9rem;text-align:left;page-break-before:avoid;break-before:avoid-page;page-break-inside:avoid;break-inside:avoid-page;}
 .masthead{display:none;}
-body.printing .masthead{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:10px;}
-.masthead-logo{max-height:60px;width:auto;margin:0 auto 4px;display:block;}
-.masthead-academy{font-weight:700;font-size:.92rem;margin:2px 0;}
-.masthead-tifinagh{font-size:.78rem;margin:0 0 2px;font-family:'Noto Sans Tifinagh','IBM Plex Sans Arabic',sans-serif;}
-.masthead-directorate{font-size:.82rem;margin:0 0 8px;}
+body.printing .masthead{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:6px;}
+.masthead-logo{max-height:58px;width:auto;margin:0 auto 3px;display:block;}
+.masthead-academy{font-weight:700;font-size:.98rem;margin:1px 0;}
+.masthead-tifinagh{font-size:.8rem;margin:0 0 1px;font-family:'Noto Sans Tifinagh','IBM Plex Sans Arabic',sans-serif;}
+.masthead-directorate{font-size:.86rem;margin:0 0 5px;}
 .print-table-block{}
-@page{size:landscape;margin:10mm 8mm;}
+@page{size:landscape;margin:8mm 8mm;}
 @media print{
   body{background:#fff;color:#000;}
   .no-print{display:none!important;}
@@ -187,14 +183,14 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
   .card{box-shadow:none;border-color:#999;}
   body.printing .agg-subnav{display:none!important;}
   body.printing .agg-panel{display:block!important;margin-bottom:0;}
-  body.printing .print-title{display:block;font-weight:700;font-size:1rem;margin-bottom:8px;text-align:center;}
+  body.printing .print-title{display:block;font-weight:700;font-size:1.05rem;margin-bottom:8px;text-align:center;}
   body.printing .print-table-block{page-break-before:always;}
   body.printing .print-table-block.first-block{page-break-before:auto;}
-  .print-block-gap{height:22px;}
+  .print-block-gap{height:16px;}
   .table-scroll{overflow:visible!important;border:none;}
-  table{font-size:9.5px;min-width:0!important;max-width:100%!important;width:100%!important;table-layout:fixed;}
+  table{font-size:9.8px;min-width:0!important;max-width:100%!important;width:100%!important;table-layout:fixed;}
   table.wide{min-width:0!important;}
-  th,td{padding:2px 3px;white-space:normal;overflow-wrap:break-word;word-break:break-word;}
+  th,td{padding:2.1px 3px;line-height:1.3;white-space:normal;overflow-wrap:break-word;word-break:break-word;}
   td.lbl{min-width:0;}
   /* عرض الأعمدة ثابت ومحسوب مسبقًا (مفعَّل هنا فقط) لضمان دخول الجدول كاملاً في عرض الصفحة دون انقسام أفقي */
   table.wide col.c-lbl{width:13%;}
@@ -205,6 +201,7 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
 </style>
 </head>
 <body>
+
 
 <div class="shell">
   <header class="topbar no-print">
@@ -811,6 +808,15 @@ document.addEventListener('input', function(e){
   }
   markDirty();
 });
+// عند مغادرة خانة رقمية (change/blur): إن كانت القيمة المكتوبة غير صالحة (سالبة أو عشرية أو فارغة)
+// تُعاد كتابتها لتطابق العدد المُحتسَب فعليًا (numVal يُحوّلها إلى 0)، لتفادي إيهام المستخدم برقم غير المُعتمد
+document.addEventListener('change', function(e){
+  const el = e.target;
+  if(el.type==='number' && el.dataset && el.dataset.section){
+    const v = numVal(el);
+    if(String(v) !== el.value.trim()) el.value = v;
+  }
+});
 /* ============ DRAFT SAVE / RESTORE (localStorage, this device only) ============ */
 const DRAFT_KEY = 'tawjih_sector_draft_v1';
 function saveDraft(){
@@ -1139,29 +1145,46 @@ if(cloudAvailable()){
 const SUBS_KEY = 'tawjih_admin_submissions_v1';
 function loadSubmissions(){ try{ return JSON.parse(localStorage.getItem(SUBS_KEY)) || {}; }catch(e){ return {}; } }
 function saveSubmissions(obj){ try{ localStorage.setItem(SUBS_KEY, JSON.stringify(obj)); }catch(e){} }
+// تحقق دفاعي: هل بيانات هذا القطاع سليمة البنية؟ (يحمي التجميع الإقليمي من الانهيار الكامل
+// بسبب قطاع واحد فاسد البيانات — مثلاً مستند سُحابي عُدِّل يدويًا وينقصه حقل "report")
+function isValidReport(sub){
+  return !!(sub && sub.report && typeof sub.report==='object' && sub.report.college && sub.report.lycee);
+}
 
 // يستورد لائحة من نصوص الرموز (مصدرها لا يهم: لصق نص، أو محتوى ملف/ملفات md) ويعيد إحصاء النتيجة
 function importCodeStrings(codeStrings){
   const subs = loadSubmissions();
   let added=0, updated=0, failed=0;
+  const nameChanges = [];
   codeStrings.forEach(code=>{
     try{
       const obj = decodeCode(code);
       const key = String(obj.sectorNumber).trim();
-      if(subs[key]) updated++; else added++;
+      const prev = subs[key];
+      if(prev){
+        updated++;
+        const prevName = (prev.consultantName||'').trim();
+        const newName = (obj.consultantName||'').trim();
+        if(prevName && newName && prevName!==newName) nameChanges.push({key, prevName, newName});
+      } else added++;
       subs[key] = { consultantName: obj.consultantName, sectorNumber: key, updatedAt: obj.updatedAt, report: obj };
     }catch(e){ failed++; }
   });
   saveSubmissions(subs);
-  return {added, updated, failed};
+  return {added, updated, failed, nameChanges};
 }
 function importCodes(){
   const raw = $('importBox').value;
   const codes = extractCodes(raw);
   const r = importCodeStrings(codes);
-  $('importMsg').textContent = codes.length===0
+  let msg = codes.length===0
     ? 'لم يُعثر على أي رمز صالح (TWJ1|...) في النص الملصق.'
     : 'تمت إضافة '+r.added+' قطاعًا جديدًا، وتحديث '+r.updated+'، وفشل قراءة '+r.failed+' رمزًا.';
+  if(r.nameChanges && r.nameChanges.length){
+    msg += ' ⚠ تنبيه: تغيّر اسم المستشار(ة) لنفس رقم القطاع في الحالات التالية، تحقق من عدم وجود خطأ في رقم القطاع: ' +
+      r.nameChanges.map(c=>'قطاع '+c.key+' («'+c.prevName+'» ← «'+c.newName+'»)').join('، ') + '.';
+  }
+  $('importMsg').textContent = msg;
   $('importBox').value='';
   renderSubsTable();
   computeAndRenderAggregate();
@@ -1220,6 +1243,11 @@ function renderSubsTable(){
     const s = subs[k];
     const dt = s.updatedAt ? new Date(s.updatedAt).toLocaleString('ar-MA') : '—';
     const cloudTag = s.origin==='cloud' ? ' <span title="مستلم تلقائيًا عبر الإنترنت">☁</span>' : '';
+    if(!isValidReport(s)){
+      return '<tr><td>'+esc(s.sectorNumber)+cloudTag+'</td><td>'+esc(s.consultantName)+'</td>'+
+        '<td class="pill-warn" style="border-radius:6px;">⚠ بيانات غير سليمة — لا تُحتسب في التجميع، يُنصح بحذفها</td>'+
+        '<td class="no-print"><button class="btn btn-sm btn-danger" onclick="removeSubmission(\''+esc(k)+'\')">حذف</button></td></tr>';
+    }
     return '<tr><td>'+esc(s.sectorNumber)+cloudTag+'</td><td>'+esc(s.consultantName)+'</td><td>'+esc(dt)+'</td>'+
       '<td class="no-print"><button class="btn btn-sm btn-danger" onclick="removeSubmission(\''+esc(k)+'\')">حذف</button></td></tr>';
   }).join('') || '<tr><td colspan="4" class="muted">لا توجد بيانات بعد.</td></tr>';
@@ -1300,16 +1328,17 @@ function renderCoverage(){
   const box = $('coverageBox');
   if(!box) return;
   const total = parseInt(($('fTotalSectors')&&$('fTotalSectors').value)||'','10');
-  const count = Object.keys(loadSubmissions()).length;
+  // تُحتسب هنا فقط القطاعات السليمة البنية، حتى تطابق النسبة ما يظهر فعليًا في جداول التجميع
+  const count = Object.values(loadSubmissions()).filter(isValidReport).length;
   if(!total || total<=0){
     box.innerHTML = '<p class="hint">حدّد "العدد الإجمالي لقطاعات الإقليم" في بيانات الترويسة أسفله لعرض نسبة اكتمال التغطية.</p>';
     return;
   }
-  const pct = Math.round((count/total)*1000)/10;
-  const barPct = Math.min(100, pct);
+  const pctVal = Math.round((count/total)*1000)/10;
+  const barPct = Math.min(100, pctVal);
   const over = count>total;
-  box.innerHTML = '<div class="coverage-text"><span>نسبة تغطية القطاعات</span><strong>'+count+' من '+total+' ('+pct+'%)'+(over?' — تجاوز العدد المحدد':'')+'</strong></div>'+
-    '<div class="progress-track"><div class="progress-fill'+(pct>=100?' full':'')+'" style="width:'+barPct+'%"></div></div>';
+  box.innerHTML = '<div class="coverage-text"><span>نسبة تغطية القطاعات</span><strong>'+count+' من '+total+' ('+pctVal+'%)'+(over?' — تجاوز العدد المحدد':'')+'</strong></div>'+
+    '<div class="progress-track"><div class="progress-fill'+(pctVal>=100?' full':'')+'" style="width:'+barPct+'%"></div></div>';
 }
 function onSeasonSelectChange(){
   const prev = deriveSeasonBefore($('fSeason').value);
@@ -1327,7 +1356,9 @@ const ADMIN_TABS = [
 let currentAdminTab = 'collegeReo';
 
 function computeAggregate(){
-  const subs = Object.values(loadSubmissions());
+  // تُستبعد القطاعات ذات البنية غير السليمة (مثلاً مستند سُحابي نُسِّق يدويًا وينقصه "report") كي لا تُسقط
+  // التجميع بأكمله — تبقى ظاهرة في لائحة القطاعات أدناه مع تنبيه، لكن دون احتساب في الجداول أو التغطية.
+  const subs = Object.values(loadSubmissions()).filter(isValidReport);
   const college = {};
   const collegeIndex = {};
   COLLEGE_LEVELS.forEach(l=>{
