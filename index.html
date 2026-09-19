@@ -145,7 +145,9 @@ td.tot{background:var(--accent-soft);color:var(--accent-strong);font-weight:700;
 tr.grand td{background:var(--surface-2);font-weight:700;}
 tr.grand td.tot{background:var(--accent);color:var(--accent-contrast);}
 td input.num{max-width:64px;min-width:52px;text-align:center;padding:6px 4px;}
-td input.txt{min-width:130px;text-align:right;padding:6px 8px;}
+td input.txt, td select.txt{min-width:130px;text-align:right;padding:6px 8px;}
+td select.txt{max-width:220px;}
+tr.lycee-conflict td{background:var(--danger-soft)!important;}
 .row-actions{display:flex;justify-content:flex-end;margin:10px 0;}
 .foot-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
 .pill-note{display:inline-flex;align-items:center;gap:6px;background:var(--good-soft);color:var(--good);border-radius:999px;padding:6px 12px;font-size:.8rem;font-weight:600;}
@@ -382,6 +384,76 @@ const LYCEE_TABLES = [
   {key:'bac1', label:'شعب الأولى بكالوريا', fromLabel:'الشعبة الأصلية', toLabel:'الشعبة الجديدة', printTitle:'المجمل الإقليمي للنتائج العددية لعملية إعادة التوجيه حسب شعب الأولى بكالوريا المتوفرة (العامة والمهنية) برسم الموسم الدراسي'},
   {key:'bac2', label:'مسالك الثانية بكالوريا', fromLabel:'المسلك الأصلي', toLabel:'المسلك الجديد', printTitle:'المجمل الإقليمي للنتائج العددية لعملية إعادة التوجيه حسب مسالك الثانية بكالوريا المتوفرة (العامة والمهنية) برسم الموسم الدراسي'}
 ];
+// اللوائح الرسمية الثابتة (من/إلى) بالسلك التأهيلي — تُستعمل كقوائم اختيار مغلقة بدل الكتابة الحرة،
+// لضمان أن كل المستشارين/المفتشين يستعملون نفس الصياغة الحرفية لكل جذع/شعبة/مسلك عند التجميع الإقليمي.
+const TRONC_LIST = [
+  'الجذع المشترك للآداب والعلوم الإنسانية',
+  'الجذع المشترك للآداب والعلوم الإنسانية – خيار فرنسية',
+  'الجذع المشترك للآداب والعلوم الإنسانية – خيار إنجليزية',
+  'الجذع المشترك للآداب والعلوم الإنسانية – خيار إسبانية',
+  'الجذع المشترك العلمي',
+  'الجذع المشترك العلمي – خيار فرنسية',
+  'الجذع المشترك العلمي – خيار إنجليزية',
+  'الجذع المشترك العلمي – خيار إسبانية',
+  'جذع مشترك التعليم الأصيل',
+  'جذع مشترك تكنولوجي',
+  'جذع مشترك مهني صناعي',
+  'جذع مشترك مهني فلاحي',
+  'جذع مشترك مهني خدماتي'
+];
+const BAC1_LIST = [
+  'شعبة الآداب والعلوم الإنسانية',
+  'شعبة الآداب والعلوم الإنسانية خيار فرنسية',
+  'شعبة الآداب والعلوم الإنسانية خيار إنجليزية',
+  'شعبة الآداب والعلوم الإنسانية خيار إسبانية',
+  'شعبة العلوم الاقتصادية والتدبير',
+  'شعبة الفنون التطبيقية',
+  'شعبة العلوم التجريبية',
+  'شعبة العلوم التجريبية خيار فرنسية',
+  'شعبة العلوم التجريبية خيار إنجليزية',
+  'شعبة العلوم التجريبية خيار إسبانية',
+  'شعبة العلوم الرياضية',
+  'شعبة العلوم الرياضية خيار فرنسية',
+  'شعبة العلوم الرياضية خيار إنجليزية',
+  'شعبة العلوم الرياضية خيار إسبانية',
+  'شعبة العلوم والتكنولوجيات الميكانيكية',
+  'شعبة العلوم والتكنولوجيات الكهربائية',
+  'شعبة اللغة العربية (التعليم الأصيل)',
+  'شعبة العلوم الشرعية (التعليم الأصيل)'
+];
+const BAC2_LIST = [
+  'الثانية باكالوريا آداب',
+  'الثانية باكالوريا علوم إنسانية',
+  'الثانية باكالوريا آداب - خ. فرنسية',
+  'الثانية باكالوريا علوم إنسانية - خ. فرنسية',
+  'الثانية باكالوريا آداب - خ. إنجليزية',
+  'الثانية باكالوريا علوم إنسانية - خ. إنجليزية',
+  'الثانية باكالوريا آداب - خ. إسبانية',
+  'الثانية باكالوريا علوم إنسانية - خ. إسبانية',
+  'الثانية باكالوريا آداب - خيار رياضة ودراسة',
+  'الثانية باكالوريا علوم إنسانية - خيار رياضة ودراسة',
+  'الثانية باكالوريا آداب - رياضة وتربية بدنية',
+  'الثانية باكالوريا علوم الحياة والأرض',
+  'الثانية باكالوريا علوم الحياة والأرض - خ. فرنسية',
+  'الثانية باكالوريا علوم الحياة والأرض - خ. إنجليزية',
+  'الثانية باكالوريا علوم الحياة والأرض - خ. إسبانية',
+  'الثانية باكالوريا علوم الحياة والأرض - خيار رياضة ودراسة',
+  'الثانية باكالوريا علوم الحياة والأرض - رياضة وتربية بدنية',
+  'الثانية باكالوريا العلوم الفيزيائية',
+  'الثانية باكالوريا العلوم الفيزيائية - خ. فرنسية',
+  'الثانية باكالوريا العلوم الفيزيائية - خ. إنجليزية',
+  'الثانية باكالوريا العلوم الفيزيائية - خ. إسبانية',
+  'الثانية باكالوريا العلوم الرياضية أ',
+  'الثانية باكالوريا العلوم الرياضية ب',
+  'الثانية باكالوريا العلوم الرياضية "أ" - خ. فرنسية',
+  'الثانية باكالوريا العلوم الرياضية "ب" - خ. فرنسية',
+  'الثانية باكالوريا العلوم الرياضية "أ" - خ. إنجليزية',
+  'الثانية باكالوريا العلوم الرياضية "ب" - خ. إنجليزية',
+  'الثانية باكالوريا العلوم الرياضية "أ" - خ. إسبانية',
+  'الثانية باكالوريا العلوم الرياضية "ب" - خ. إسبانية',
+  'الثانية باكالوريا العلوم الزراعية'
+];
+const LYCEE_OPTIONS = {tronc: TRONC_LIST, bac1: BAC1_LIST, bac2: BAC2_LIST};
 const EXCLUS_COLL_LEVELS = [{key:'1ASC',label:'1ASC'},{key:'2ASC',label:'2ASC'},{key:'3ASC',label:'3ASC'}];
 const EXCLUS_QUALIF_LEVELS = [{key:'TC',label:'TC'},{key:'1BAC',label:'1 BAC'},{key:'2BAC',label:'2 BAC'}];
 const EXCLUS_CATS = [
@@ -530,11 +602,32 @@ function recomputeCollegeGrand(levelKey){
 }
 
 /* ============ LYCEE REORIENTATION (SECTOR ENTRY, DYNAMIC ROWS) ============ */
+// يبني قائمة اختيار مغلقة من اللائحة الرسمية؛ إن كانت القيمة المحفوظة سابقًا (بيانات قديمة قبل اعتماد
+// اللوائح المغلقة) غير موجودة حرفيًا في اللائحة، تُضاف كخيار إضافي مُعلَّم بتنبيه بدل حذفها أو تجاهلها بصمت.
+// excludeValue: القيمة المختارة في الطرف الآخر من نفس الصف (من/إلى) — تُخفى من هذه القائمة لمنع اختيار
+// نفس الجذع/الشعبة/المسلك في الطرفين معًا، إلا إذا كانت هي نفسها القيمة الحالية لهذه القائمة (بيانات قديمة
+// متعارضة فعلاً) فتبقى ظاهرة كي لا تختفي القيمة المحفوظة بصمت، ويُعرض تنبيه التعارض على مستوى الصف بدل ذلك.
+function lyceeSelectHTML(list, currentValue, attrs, id, excludeValue){
+  let html = '<select class="txt" '+attrs+' id="'+id+'">';
+  html += '<option value=""'+(!currentValue?' selected':'')+'>-- اختر --</option>';
+  const inList = list.includes(currentValue);
+  list.forEach(opt=>{
+    if(excludeValue && opt===excludeValue && opt!==currentValue) return;
+    html += '<option value="'+esc(opt)+'"'+(opt===currentValue?' selected':'')+'>'+esc(opt)+'</option>';
+  });
+  if(currentValue && !inList){
+    html += '<option value="'+esc(currentValue)+'" selected>⚠ '+esc(currentValue)+' (خارج اللائحة الرسمية — يُرجى التصحيح)</option>';
+  }
+  html += '</select>';
+  return html;
+}
 function lyceeRowHTML(tblKey, idx, row){
   const base = 'data-section="lycee" data-tbl="'+tblKey+'" data-idx="'+idx+'" ';
-  let html = '<tr>';
-  html += '<td><input type="text" class="txt" value="'+esc(row.from)+'" '+base+'data-field="from" id="inp_lycee_'+tblKey+'_'+idx+'_from" placeholder="..."></td>';
-  html += '<td><input type="text" class="txt" value="'+esc(row.to)+'" '+base+'data-field="to" id="inp_lycee_'+tblKey+'_'+idx+'_to" placeholder="..."></td>';
+  const opts = LYCEE_OPTIONS[tblKey] || [];
+  const conflict = !!(row.from && row.to && row.from===row.to);
+  let html = '<tr'+(conflict?' class="lycee-conflict"':'')+'>';
+  html += '<td>'+lyceeSelectHTML(opts, row.from, base+'data-field="from"', 'inp_lycee_'+tblKey+'_'+idx+'_from', row.to)+'</td>';
+  html += '<td>'+lyceeSelectHTML(opts, row.to, base+'data-field="to"', 'inp_lycee_'+tblKey+'_'+idx+'_to', row.from)+'</td>';
   NUM_FIELDS.forEach(f=>{
     html += numInputCell(base+'data-field="'+f+'" id="inp_lycee_'+tblKey+'_'+idx+'_'+f+'"', row[f]);
   });
@@ -557,7 +650,13 @@ function renderLyceeTable(tblKey){
   const rows = state.lycee[tblKey];
   const head = reoHeadHTML(t.fromLabel, t.toLabel, true);
   const body = rows.map((r,i)=>lyceeRowHTML(tblKey,i,r)).join('') + lyceeGrandRowHTML(tblKey);
-  const html = '<div class="table-scroll"><table class="wide">'+head+'<tbody id="tbody_lycee_'+tblKey+'">'+body+'</tbody></table></div>'+
+  // لا يمكن اختيار نفس الجذع/الشعبة/المسلك في الطرفين معًا (القوائم المنسدلة تمنع ذلك افتراضيًا)؛ هذا التنبيه
+  // يظهر فقط لصفوف قديمة مستوردة كانت قد سُجِّلت بهذا التعارض قبل اعتماد اللوائح المغلقة
+  const hasConflict = rows.some(r=> r.from && r.to && r.from===r.to);
+  const conflictWarning = hasConflict
+    ? '<p class="hint" style="color:var(--danger);margin-bottom:8px;">⚠ يوجد صف واحد أو أكثر تم فيه اختيار نفس '+esc(t.fromLabel)+' في الطرفين (من/إلى) — وهذا غير ممكن منطقيًا ولن يُحتسب في التجميع. يرجى تصحيح '+esc(t.toLabel)+' في الصف المُلوَّن أدناه.</p>'
+    : '';
+  const html = conflictWarning + '<div class="table-scroll"><table class="wide">'+head+'<tbody id="tbody_lycee_'+tblKey+'">'+body+'</tbody></table></div>'+
     '<div class="row-actions no-print" style="justify-content:flex-start;"><button class="btn btn-sm" onclick="addLyceeRow(\''+tblKey+'\')">+ إضافة صف</button></div>';
   const host = $('lyceePanel_'+tblKey);
   if(host){ host.innerHTML = html; }
@@ -798,7 +897,12 @@ document.addEventListener('input', function(e){
   } else if(sec==='lycee'){
     const {tbl, idx, field} = el.dataset;
     const row = state.lycee[tbl][idx];
-    if(field==='from' || field==='to'){ row[field] = el.value; }
+    if(field==='from' || field==='to'){
+      row[field] = el.value;
+      // إعادة رسم الجدول لتحديث القائمة المقابلة (إخفاء القيمة المُختارة حديثًا من الطرف الآخر
+      // كي يستحيل اختيار نفس الجذع/الشعبة/المسلك في الطرفين معًا) وتحديث تنبيه التعارض إن وُجد
+      renderLyceeTable(tbl);
+    }
     else { row[field] = numVal(el); recomputeLyceeRow(tbl, +idx); recomputeLyceeGrand(tbl); }
   } else if(sec==='exclus'){
     const {block, cat, level, field} = el.dataset;
@@ -1385,7 +1489,9 @@ function computeAggregate(){
       const rows = (s.report.lycee && s.report.lycee[t.key]) || [];
       rows.forEach(row=>{
         const from=(row.from||'').trim(), to=(row.to||'').trim();
-        if(!from && !to) return;
+        // يُستبعد الصف إن لم يُختر كلا الطرفين (من/إلى) — اختيار واحد فقط لا يمثل عملية إعادة توجيه مكتملة،
+        // وكذلك إن كان الطرفان متطابقين (بيانات قديمة متعارضة) لأن إعادة التوجيه إلى نفس الجذع/الشعبة/المسلك غير منطقية
+        if(!from || !to || from===to) return;
         const key = from+'␟'+to;
         if(!lycee[t.key].has(key)) lycee[t.key].set(key, {from,to,n_d_m:0,n_d_f:0,n_a_m:0,n_a_f:0,r_d_m:0,r_d_f:0,r_a_m:0,r_a_f:0});
         const agg = lycee[t.key].get(key);
