@@ -1,4 +1,8 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إحصائيات إعادة التوجيه والمفصولين والمنقطعين</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
@@ -210,7 +214,7 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
     <div class="brand">
       <h1>إحصائيات مرحلة إعادة التوجيه وإرجاع المفصولين والمنقطعين</h1>
       <p class="subtitle-main">المديرية الإقليمية بولمان</p>
-      <p>تجميع إقليمي آلي انطلاقًا من معطيات قطاعات التوجيه المدرسي</p>
+      <p>تجميع إقليمي آلي انطلاقًا من معطيات مناطق التوجيه المدرسي</p>
     </div>
     <span class="badge" id="seasonBadge">الموسم الدراسي</span>
   </header>
@@ -218,23 +222,23 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
   <section class="card no-print">
     <div class="grid2">
       <div>
-        <label for="fConsultant">اسم المستشار(ة) / المفتش(ة)</label>
+        <label for="fConsultant">اسم المفتش(ة)</label>
         <input type="text" id="fConsultant" placeholder="مثال: عبد الرحيم الفاسي">
       </div>
       <div>
-        <label for="fSector">رقم القطاع المدرسي</label>
+        <label for="fSector">رقم المنطقة المدرسية</label>
         <input type="text" id="fSector" placeholder="مثال: 07">
       </div>
     </div>
-    <p class="hint">هذان الحقلان يحددان قطاعك عند التجميع الإقليمي. أعد استعمال نفس رقم القطاع لتحديث بياناتك لاحقًا.</p>
+    <p class="hint">هذان الحقلان يحددان منطقتك عند التجميع الإقليمي. أعد استعمال نفس رقم المنطقة لتحديث بياناتك لاحقًا.</p>
     <div id="draftBanner" style="display:none;margin-top:10px;align-items:center;gap:10px;" class="pill-note"></div>
     <div class="row-actions no-print" style="justify-content:flex-start;margin-top:10px;">
-      <button class="btn btn-sm" onclick="clearDraft()">🗑 قطاع جديد / مسح البيانات المحفوظة على هذا الجهاز</button>
+      <button class="btn btn-sm" onclick="clearDraft()">🗑 منطقة جديدة / مسح البيانات المحفوظة على هذا الجهاز</button>
     </div>
   </section>
 
   <nav class="tabs no-print">
-    <button id="tabBtnSector" class="active" onclick="showMainTab('sector')">إدخال بيانات القطاع</button>
+    <button id="tabBtnSector" class="active" onclick="showMainTab('sector')">إدخال بيانات المنطقة</button>
     <button id="tabBtnAdmin" onclick="showMainTab('admin')">التجميع الإقليمي (رئيس المصلحة)</button>
   </nav>
 
@@ -251,7 +255,7 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
     <div id="pinGate" class="card pin-wrap">
       <div class="lock">🔒</div>
       <h2 class="section-title">دخول محمي</h2>
-      <p class="section-desc">هذا القسم مخصص لرئيس المصلحة المكلف بتجميع نتائج قطاعات الإقليم.</p>
+      <p class="section-desc">هذا القسم مخصص لرئيس المصلحة المكلف بتجميع نتائج مناطق الإقليم.</p>
       <div class="stack">
         <input type="password" id="pinInput" placeholder="الرمز السري" autocomplete="off">
         <button class="btn btn-primary" id="btnUnlock" onclick="tryUnlock()">دخول</button>
@@ -265,8 +269,8 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
         <button class="btn btn-sm" onclick="signOutAdmin()">تسجيل الخروج</button>
       </div>
       <section class="card no-print">
-        <p class="section-title">استيراد بيانات القطاعات</p>
-        <p class="section-desc">أسهل طريقة: اضغط "استيراد من ملف(ات)" واختر كل ملفات md التي توصلت بها من مستشاري/مفتشي القطاعات دفعة واحدة. أو الصق نص الرسائل/الرموز في الخانة أسفله (يمكن لصق نص طويل يحتوي عدة رموز أو رمزًا واحدًا، وسيتم استخراجها تلقائيًا)، ثم اضغط "إضافة/تحديث".</p>
+        <p class="section-title">استيراد بيانات المناطق</p>
+        <p class="section-desc">أسهل طريقة: اضغط "استيراد من ملف(ات)" واختر كل ملفات md التي توصلت بها من مفتشي المناطق دفعة واحدة. أو الصق نص الرسائل/الرموز في الخانة أسفله (يمكن لصق نص طويل يحتوي عدة رموز أو رمزًا واحدًا، وسيتم استخراجها تلقائيًا)، ثم اضغط "إضافة/تحديث".</p>
         <div class="row-actions" style="justify-content:flex-start;margin-bottom:10px;">
           <button class="btn btn-primary" onclick="document.getElementById('importFileInput').click()">📂 استيراد من ملف(ات) md</button>
           <input type="file" id="importFileInput" accept=".md,.txt,text/markdown,text/plain" multiple style="display:none">
@@ -279,10 +283,10 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
       </section>
 
       <section class="card no-print">
-        <p class="section-title">القطاعات المُدرجة (<span id="subsCount">0</span>)</p>
+        <p class="section-title">المناطق المُدرجة (<span id="subsCount">0</span>)</p>
         <div id="coverageBox" style="margin:2px 0 14px;"></div>
         <div class="table-scroll">
-          <table class="subs-table" id="subsTable"><thead><tr><th>رقم القطاع</th><th>المستشار(ة)/المفتش(ة)</th><th>آخر تحديث</th><th></th></tr></thead><tbody></tbody></table>
+          <table class="subs-table" id="subsTable"><thead><tr><th>رقم المنطقة</th><th>المفتش(ة)</th><th>آخر تحديث</th><th></th></tr></thead><tbody></tbody></table>
         </div>
         <div class="foot-actions">
           <button class="btn btn-sm" onclick="exportBackup()">تصدير نسخة احتياطية</button>
@@ -314,7 +318,7 @@ body.printing .masthead{display:flex;flex-direction:column;align-items:center;te
             <select id="fPrevSeason"></select>
           </div>
           <div>
-            <label for="fTotalSectors">العدد الإجمالي لقطاعات الإقليم</label>
+            <label for="fTotalSectors">العدد الإجمالي لمناطق الإقليم</label>
             <input type="number" id="fTotalSectors" min="1" step="1" placeholder="مثال: 12">
           </div>
         </div>
@@ -385,7 +389,7 @@ const LYCEE_TABLES = [
   {key:'bac2', label:'مسالك الثانية بكالوريا', fromLabel:'المسلك الأصلي', toLabel:'المسلك الجديد', printTitle:'المجمل الإقليمي للنتائج العددية لعملية إعادة التوجيه حسب مسالك الثانية بكالوريا المتوفرة (العامة والمهنية) برسم الموسم الدراسي'}
 ];
 // اللوائح الرسمية الثابتة (من/إلى) بالسلك التأهيلي — تُستعمل كقوائم اختيار مغلقة بدل الكتابة الحرة،
-// لضمان أن كل المستشارين/المفتشين يستعملون نفس الصياغة الحرفية لكل جذع/شعبة/مسلك عند التجميع الإقليمي.
+// لضمان أن كل المفتشين يستعملون نفس الصياغة الحرفية لكل جذع/شعبة/مسلك عند التجميع الإقليمي.
 const TRONC_LIST = [
   'الجذع المشترك للآداب والعلوم الإنسانية',
   'الجذع المشترك للآداب والعلوم الإنسانية – خيار فرنسية',
@@ -795,7 +799,7 @@ function buildSectorNav(){
     '<div id="collegeLevelPanels"></div></div>';
   html += '<div id="panelWrap_lyceeReo" class="sector-panel" hidden>'+
     '<p class="section-title">إعادة التوجيه بالسلك التأهيلي</p>'+
-    '<p class="section-desc">التخصصات بالتأهيلي تختلف من مؤسسة لأخرى، لذا أضف الصفوف التي تحتاجها واكتب اسم الجذع/الشعبة/المسلك يدويًا.</p>'+
+    '<p class="section-desc">التخصصات بالتأهيلي تختلف من مؤسسة لأخرى، لذا أضف الصفوف التي تحتاجها، واختر لكل صف الجذع/الشعبة/المسلك الأصلي والجديد من اللائحتين المنسدلتين (اللائحة الرسمية المعتمدة) — لا يمكن اختيار نفس التخصص في الطرفين معًا.</p>'+
     '<div class="subnav" id="lyceeTblNav">'+LYCEE_TABLES.map(t=>'<button id="ltb_'+t.key+'" onclick="showLyceeTable(\''+t.key+'\')">'+t.label+'</button>').join('')+'</div>'+
     LYCEE_TABLES.map(t=>'<div id="lyceePanel_'+t.key+'" hidden></div>').join('')+
     '</div>';
@@ -830,7 +834,7 @@ function buildSectorNav(){
     '</div>'+
     '<div class="divider"></div>'+
     '<p class="section-title" style="font-size:.92rem;">متابعة تعديل مسودة سابقة</p>'+
-    '<p class="hint">إن كنت تريد استئناف تعديل قطاعك على جهاز آخر، الصق هنا رمزًا سبق أن ولّدته.</p>'+
+    '<p class="hint">إن كنت تريد استئناف تعديل منطقتك على جهاز آخر، الصق هنا رمزًا سبق أن ولّدته.</p>'+
     '<textarea id="reloadBox" class="code-box" style="min-height:60px;"></textarea>'+
     '<div class="row-actions" style="justify-content:flex-start;"><button class="btn btn-sm" onclick="reloadFromCode()">استيراد إلى النموذج</button></div>'+
     '</div>';
@@ -984,7 +988,7 @@ function generateCode(){
   state.consultantName = $('fConsultant').value.trim();
   state.sectorNumber = $('fSector').value.trim();
   if(!state.consultantName || !state.sectorNumber){
-    alert('يرجى إدخال اسم المستشار(ة)/المفتش(ة) ورقم القطاع المدرسي أولًا.');
+    alert('يرجى إدخال اسم المفتش(ة) ورقم المنطقة المدرسية أولًا.');
     return;
   }
   state.updatedAt = new Date().toISOString();
@@ -1009,7 +1013,7 @@ function submitOnline(){
   state.consultantName = $('fConsultant').value.trim();
   state.sectorNumber = $('fSector').value.trim();
   if(!state.consultantName || !state.sectorNumber){
-    alert('يرجى إدخال اسم المستشار(ة)/المفتش(ة) ورقم القطاع المدرسي أولًا.');
+    alert('يرجى إدخال اسم المفتش(ة) ورقم المنطقة المدرسية أولًا.');
     return;
   }
   if(!cloudAvailable()){
@@ -1056,9 +1060,9 @@ function buildMdFileContent(code){
   const {done, total} = sectorCompletionCount();
   const status = done>=total ? 'مكتملة (4 من 4 أقسام) ✓' : (done+' من '+total+' أقسام — لم تُعلَّم كل الأقسام كمكتملة بعد، يُنصح بمراجعتها');
   const dt = new Date().toLocaleString('ar-MA');
-  return '# بيانات قطاع التوجيه\n\n'+
-    '- **رقم القطاع:** '+state.sectorNumber+'\n'+
-    '- **المستشار(ة)/المفتش(ة):** '+state.consultantName+'\n'+
+  return '# بيانات منطقة التوجيه\n\n'+
+    '- **رقم المنطقة:** '+state.sectorNumber+'\n'+
+    '- **المفتش(ة):** '+state.consultantName+'\n'+
     '- **تاريخ التوليد:** '+dt+'\n'+
     '- **حالة التعبئة:** '+status+'\n\n'+
     '## رمز الإرسال\n\n'+
@@ -1191,7 +1195,7 @@ function onAdminAuthed(user){
   $('adminContent').hidden = false;
   initAdmin();
   attachCloudSync();
-  setCloudStatus('متصل بحساب: '+user.email+' — تتم المزامنة مع القطاعات تلقائيًا.', false);
+  setCloudStatus('متصل بحساب: '+user.email+' — تتم المزامنة مع المناطق تلقائيًا.', false);
 }
 function signOutAdmin(){
   detachCloudSync();
@@ -1227,7 +1231,7 @@ function attachCloudSync(){
     saveSubmissions(subs);
     renderSubsTable();
     computeAndRenderAggregate();
-    setCloudStatus('متصل ● آخر مزامنة: '+new Date().toLocaleTimeString('ar-MA')+' — عدد القطاعات الواردة عبر الإنترنت: '+snapshot.size, false);
+    setCloudStatus('متصل ● آخر مزامنة: '+new Date().toLocaleTimeString('ar-MA')+' — عدد المناطق الواردة عبر الإنترنت: '+snapshot.size, false);
   }, function(err){
     setCloudStatus('تعذّر الاتصال بالقاعدة السحابية ('+(err && err.message ? err.message : '')+'). البيانات المستوردة يدويًا تبقى معروضة كما هي.', true);
   });
@@ -1249,8 +1253,8 @@ if(cloudAvailable()){
 const SUBS_KEY = 'tawjih_admin_submissions_v1';
 function loadSubmissions(){ try{ return JSON.parse(localStorage.getItem(SUBS_KEY)) || {}; }catch(e){ return {}; } }
 function saveSubmissions(obj){ try{ localStorage.setItem(SUBS_KEY, JSON.stringify(obj)); }catch(e){} }
-// تحقق دفاعي: هل بيانات هذا القطاع سليمة البنية؟ (يحمي التجميع الإقليمي من الانهيار الكامل
-// بسبب قطاع واحد فاسد البيانات — مثلاً مستند سُحابي عُدِّل يدويًا وينقصه حقل "report")
+// تحقق دفاعي: هل بيانات هذه المنطقة سليمة البنية؟ (يحمي التجميع الإقليمي من الانهيار الكامل
+// بسبب منطقة واحدة فاسدة البيانات — مثلاً مستند سُحابي عُدِّل يدويًا وينقصه حقل "report")
 function isValidReport(sub){
   return !!(sub && sub.report && typeof sub.report==='object' && sub.report.college && sub.report.lycee);
 }
@@ -1283,10 +1287,10 @@ function importCodes(){
   const r = importCodeStrings(codes);
   let msg = codes.length===0
     ? 'لم يُعثر على أي رمز صالح (TWJ1|...) في النص الملصق.'
-    : 'تمت إضافة '+r.added+' قطاعًا جديدًا، وتحديث '+r.updated+'، وفشل قراءة '+r.failed+' رمزًا.';
+    : 'تمت إضافة '+r.added+' منطقة جديدة، وتحديث '+r.updated+'، وفشل قراءة '+r.failed+' رمزًا.';
   if(r.nameChanges && r.nameChanges.length){
-    msg += ' ⚠ تنبيه: تغيّر اسم المستشار(ة) لنفس رقم القطاع في الحالات التالية، تحقق من عدم وجود خطأ في رقم القطاع: ' +
-      r.nameChanges.map(c=>'قطاع '+c.key+' («'+c.prevName+'» ← «'+c.newName+'»)').join('، ') + '.';
+    msg += ' ⚠ تنبيه: تغيّر اسم المفتش(ة) لنفس رقم المنطقة في الحالات التالية، تحقق من عدم وجود خطأ في رقم المنطقة: ' +
+      r.nameChanges.map(c=>'منطقة '+c.key+' («'+c.prevName+'» ← «'+c.newName+'»)').join('، ') + '.';
   }
   $('importMsg').textContent = msg;
   $('importBox').value='';
@@ -1307,7 +1311,7 @@ function importFromFiles(fileList){
         const r = importCodeStrings(allCodes);
         $('importMsg').textContent = allCodes.length===0
           ? 'لم يُعثر على أي رمز صالح داخل الملف(ات) المختارة ('+files.length+' ملف).'
-          : 'من '+files.length+' ملف(ات): تمت إضافة '+r.added+' قطاعًا جديدًا، وتحديث '+r.updated+'، وفشل قراءة '+r.failed+' رمزًا.';
+          : 'من '+files.length+' ملف(ات): تمت إضافة '+r.added+' منطقة جديدة، وتحديث '+r.updated+'، وفشل قراءة '+r.failed+' رمزًا.';
         renderSubsTable();
         computeAndRenderAggregate();
       }
@@ -1316,7 +1320,7 @@ function importFromFiles(fileList){
       filesRead++;
       if(filesRead===files.length){
         const r = importCodeStrings(allCodes);
-        $('importMsg').textContent = 'تعذّرت قراءة ملف واحد أو أكثر. تمت إضافة '+r.added+' قطاعًا جديدًا، وتحديث '+r.updated+'.';
+        $('importMsg').textContent = 'تعذّرت قراءة ملف واحد أو أكثر. تمت إضافة '+r.added+' منطقة جديدة، وتحديث '+r.updated+'.';
         renderSubsTable();
         computeAndRenderAggregate();
       }
@@ -1329,7 +1333,7 @@ function removeSubmission(key){
   const entry = subs[key];
   if(entry && entry.origin==='cloud' && cloudAvailable()){
     firebaseDb.collection('submissions').doc(key).delete().catch(function(err){
-      alert('تعذّر حذف القطاع من القاعدة السحابية: '+(err && err.message ? err.message : ''));
+      alert('تعذّر حذف المنطقة من القاعدة السحابية: '+(err && err.message ? err.message : ''));
     });
     return; // سيُحذف محليًا تلقائيًا فور وصول التحديث من المزامنة الحية
   }
@@ -1432,16 +1436,16 @@ function renderCoverage(){
   const box = $('coverageBox');
   if(!box) return;
   const total = parseInt(($('fTotalSectors')&&$('fTotalSectors').value)||'','10');
-  // تُحتسب هنا فقط القطاعات السليمة البنية، حتى تطابق النسبة ما يظهر فعليًا في جداول التجميع
+  // تُحتسب هنا فقط المناطق السليمة البنية، حتى تطابق النسبة ما يظهر فعليًا في جداول التجميع
   const count = Object.values(loadSubmissions()).filter(isValidReport).length;
   if(!total || total<=0){
-    box.innerHTML = '<p class="hint">حدّد "العدد الإجمالي لقطاعات الإقليم" في بيانات الترويسة أسفله لعرض نسبة اكتمال التغطية.</p>';
+    box.innerHTML = '<p class="hint">حدّد "العدد الإجمالي لمناطق الإقليم" في بيانات الترويسة أسفله لعرض نسبة اكتمال التغطية.</p>';
     return;
   }
   const pctVal = Math.round((count/total)*1000)/10;
   const barPct = Math.min(100, pctVal);
   const over = count>total;
-  box.innerHTML = '<div class="coverage-text"><span>نسبة تغطية القطاعات</span><strong>'+count+' من '+total+' ('+pctVal+'%)'+(over?' — تجاوز العدد المحدد':'')+'</strong></div>'+
+  box.innerHTML = '<div class="coverage-text"><span>نسبة تغطية المناطق</span><strong>'+count+' من '+total+' ('+pctVal+'%)'+(over?' — تجاوز العدد المحدد':'')+'</strong></div>'+
     '<div class="progress-track"><div class="progress-fill'+(pctVal>=100?' full':'')+'" style="width:'+barPct+'%"></div></div>';
 }
 function onSeasonSelectChange(){
@@ -1460,8 +1464,8 @@ const ADMIN_TABS = [
 let currentAdminTab = 'collegeReo';
 
 function computeAggregate(){
-  // تُستبعد القطاعات ذات البنية غير السليمة (مثلاً مستند سُحابي نُسِّق يدويًا وينقصه "report") كي لا تُسقط
-  // التجميع بأكمله — تبقى ظاهرة في لائحة القطاعات أدناه مع تنبيه، لكن دون احتساب في الجداول أو التغطية.
+  // تُستبعد المناطق ذات البنية غير السليمة (مثلاً مستند سُحابي نُسِّق يدويًا وينقصه "report") كي لا تُسقط
+  // التجميع بأكمله — تبقى ظاهرة في لائحة المناطق أدناه مع تنبيه، لكن دون احتساب في الجداول أو التغطية.
   const subs = Object.values(loadSubmissions()).filter(isValidReport);
   const college = {};
   const collegeIndex = {};
@@ -1665,7 +1669,7 @@ function init(){
   if(hadDraft){
     $('fConsultant').value = state.consultantName || '';
     $('fSector').value = state.sectorNumber || '';
-    $('draftBanner').innerHTML = 'تم استرجاع مسودة محفوظة على هذا الجهاز'+(state.sectorNumber?' — القطاع رقم '+esc(state.sectorNumber):'')+'. إن لم تكن هذه بياناتك، امسحها من الزر أسفله.';
+    $('draftBanner').innerHTML = 'تم استرجاع مسودة محفوظة على هذا الجهاز'+(state.sectorNumber?' — المنطقة رقم '+esc(state.sectorNumber):'')+'. إن لم تكن هذه بياناتك، امسحها من الزر أسفله.';
     $('draftBanner').style.display = 'inline-flex';
     showCollegeLevel(currentCollegeLevel);
     LYCEE_TABLES.forEach(t=> rendered['lycee_'+t.key]=false);
